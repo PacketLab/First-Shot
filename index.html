@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en-us">
+    <head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+		<title>Internet measurement during the COVID-19 pandemic with PacketLab</title>
+
+		
+  		<link rel="stylesheet" href="/css/style.css">
+		<link rel="stylesheet" href="/css/fonts.css">
+		
+		<link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png">
+		<link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png">
+		<link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+
+		
+		<link href="" rel="alternate" type="application/rss+xml" title="My New Hugo Site" />
+	</head>
+
+    <body>
+        		<nav class="nav">
+			<div class="nav-container">
+				<a href="/">
+					<h2 class="nav-title">PacketLab COVID-19 Project</h2>
+				</a>
+				<ul>
+    
+    
+</ul>
+			</div>
+		</nav>
+
+        
+
+<main>
+	<div class="post">
+	<!--
+		<div class="post-info">
+    <span>Written by</span>
+        
+        <br>
+        <span>on&nbsp;</span><time datetime="2020-04-22 01:34:42 -0400 EDT">April 22, 2020</time>
+</div>
+	-->
+		<h1 class="post-title">Internet measurement during the COVID-19 pandemic with PacketLab</h1>
+<div class="post-line"></div>
+
+		
+
+		<p><img src="/pktlab_logo.png" alt=""></p>
+<h2 id="what-is-this-about">What is this about?</h2>
+<p>As we go through the COVID-19 pandemic with social distancing being practiced, Internet usage is expected to rise with addition multimedia traffic introduced due to utilization of video conferencing software and multimedia entertainment services. It would therefore be interesting to perform network measurements to see the actual impact of the pandemic on Internet performance.</p>
+<p>Contrary to utilizing existing measurement infrastructure, in this project we opt to employ <a href="https://www.caida.org/publications/papers/2017/packetlab/packetlab.pdf"><strong>PacketLab</strong></a> due to the general functionality provided where a much larger variety of different experiments can be executed without needing to change the measurment endpoint in any way. With this project we hope to showcase the diverse ability of PacketLab as well as put PacketLab to test and identify some possible improvements for the PacketLab design.</p>
+<h2 id="what-is-packetlab">What is PacketLab?</h2>
+<p>PacketLab is a universal measurement endpoint interface that lowers the barriers faced by experimenters and measurement endpoint operators. PacketLab is built on two key ideas: It moves the measurement logic out of the endpoint to a separate experiment control server, making each endpoint a lightweight packet source/sink. At the same time, it provides a way to delegate access to measurement endpoints while retaining fine-grained control over how endpoints are used by others, allowing research groups to share measurement infrastructure with each other with little overhead. PacketLab is currently still under development. However, a prototype reference endpoint implementation as a stand alone binary (packaged in a Docker image) is available to run network measurement experiments utilizing TCP and UDP services, which we will employ to perform network measurements in this project.</p>
+<h2 id="what-will-we-do-with-the-deployed-endpoints">What will we do with the deployed endpoints?</h2>
+<p>For the deployed endpoints, we currently plan to perform Internet measurement experiments such as measuring latency for queries to public DNS resolvers (e.g. Google public DNS) and local DNS resolvers as well as measurement of network latency from endpoints to the experiment controller at UIUC.</p>
+<p>As the PacketLab reference endpoint implementation is currently still under development, it may be possible that we will distribute updated endpoint binaries to deployed endpoint Docker containers for bug fix and feature enhancement. The process of updating will be done securely with digital signatures employed to prevent tampering with the sent binary.</p>
+<p>Due to this project being temporary during the period of the COVID-19 pandemic, a kill switch mechanism is embedded in the endpoint where when signaled, the execution of the endpoint will be stopped and the Docker container will exit afterwards. The kill switch will be turned on after the measurement experiments have all been completed.</p>
+<p>In addition, the execution of the endpoint will also be halted if the endpoint fail to reach the pktlab.caida.org:20557 HTTP server for 3 consecutive days to prevent the existence of lingering measurment endpoints that does not have access to the Internet.</p>
+<h2 id="how-do-i---">How do I . . .</h2>
+<h3 id="participate-in-the-project">Participate in the project?</h3>
+<p>To participate in this project, join us by setting up an endpoint on your local machine via following the provided steps below to retrieve and deploy the Docker image for the endpoint (basically by first following the instructions in the <strong>Retrieve and load the Docker image</strong> section and then following the instructions in the <strong>Run the PacketLab measurement endpoint after loading the Docker image</strong> section).</p>
+<h4 id="prerequisite">Prerequisite</h4>
+<ol>
+<li>Any Linux distro with a recent enough kernel</li>
+</ol>
+<blockquote>
+<p>Tested on an Ubuntu 18.04 machine with kernel version 4.15.0</p>
+</blockquote>
+<ol start="2">
+<li>An up to date Docker installation</li>
+</ol>
+<blockquote>
+<p>Tested on Docker community edition with client version 19.03.8, server engine version 19.03.8, server containerd version 1.2.13, server runc version 1.0.0-rc10 and server docker-init version 0.18.0.</p>
+</blockquote>
+<ol start="3">
+<li><code>tar</code></li>
+</ol>
+<blockquote>
+<p>Tested with GNU tar 1.29</p>
+</blockquote>
+<ol start="4">
+<li>Internet connectivity</li>
+<li>[OPTIONAL] <code>openssl</code></li>
+</ol>
+<blockquote>
+<p>Tested with OpenSSL 1.1.1</p>
+</blockquote>
+<h3 id="retrieve-and-load-the-docker-image">Retrieve and load the Docker image?</h3>
+<p>Currently, the PacketLab endpoint is packaged as a Docker image. To retrieve and load the Docker image, follow the following 2 steps:</p>
+<ul>
+<li>Step (1): Download the Docker image <a href="pktlab.caida.org:20557/pktlabme_image.tar.gz">pktlabme_image.tar.gz</a>.</li>
+</ul>
+<blockquote>
+<p>Optional: The digital signature for the image is available <a href="pktlab.caida.org:20557/pktlabme_image.tar.gz.sha256">here</a>. To verify the image, one could download the <a href="/public.pem">ECDSA public key</a> and verify the image tarball via the following OpenSSL command (tested with OpenSSL 1.1.1):</p>
+<pre><code>openssl dgst -sha256 -verify public.pem -signature pktlabme_image.tar.gz.sha256 pktlabme_image.tar.gz
+</code></pre><p>The command will print <code>Verified OK</code> if the image and signature matches.</p>
+</blockquote>
+<ul>
+<li>Step (2): Load the downloaded PacketLab Docker image via running:</li>
+</ul>
+<pre><code>docker load -i pktlabme_image.tar.gz
+</code></pre><p>The Docker image is now loaded and ready to go.</p>
+<h3 id="run-the-packetlab-measurement-endpoint-after-loading-the-docker-image">Run the PacketLab measurement endpoint after loading the Docker image?</h3>
+<p>To instantiate a container from the Docker image and run it, execute the following command:</p>
+<pre><code>docker run -d --rm pktlabme
+</code></pre><p>The container ID for the instantiated endpoint Docker container will be printed if started successfully. At this point the endpoint is now up and available for experiment running.</p>
+<blockquote>
+<p>Note that running the container in detached mode (<code>-d</code> option) is highly recommended due to problems of deteaching from the container. The <code>--rm</code> option allow automatic removal of the instantiated container after the container stops.</p>
+</blockquote>
+<h3 id="stop-running-the-endpoint">Stop running the endpoint?</h3>
+<p>If one would like to stop running the endpoint, first find the container ID printed when running the container, or run</p>
+<pre><code>docker ps
+</code></pre><p>and identify the container ID corresponding to the <code>pktlabme</code> image.
+After having the container ID, run the following command:</p>
+<pre><code>docker stop [container ID]
+</code></pre><p>to stop the container.</p>
+<h3 id="remove-the-instantiated-docker-container">Remove the instantiated Docker container?</h3>
+<p>After stopping the endpoint container, to clean up the instantiated container one will need to remove it.
+If the <code>--rm</code> option is specified when running the Docker container, there is no need to explicitly remove the stopped container as it is done automatically. Otherwise, to remove the container run</p>
+<pre><code>docker rm [container ID]
+</code></pre><p>with the <code>container ID</code> being the same as that used to stop the container.</p>
+<blockquote>
+<p>Note that if somehow one cannot recall the container ID, one can run the command</p>
+<pre><code>docker ps -a
+</code></pre><p>and look for exited PacketLab containers corresponding to the <code>pktlabme</code> image. (note the <code>-a</code> option since <code>docker ps</code> defaults to only showing running containers)</p>
+</blockquote>
+<h3 id="remove-the-loaded-docker-image">Remove the loaded Docker image?</h3>
+<p>To delete the loaded endpoint Docker image, run the following command:</p>
+<pre><code>docker rmi pktlabme
+</code></pre>
+
+		
+	</div>
+
+	<div class="pagination">
+
+		<a href="#" class="top">Top</a>
+	</div>
+</main>
+
+
+        		<footer>
+			<span>
+			&copy; <time datetime="2020-04-22 02:23:13.823385012 -0400 EDT m=&#43;0.048172522">2020</time> . Made with <a href='https://gohugo.io'>Hugo</a> using the <a href='https://github.com/EmielH/tale-hugo/'>Tale</a> theme.
+			</span>
+		</footer>
+
+    </body>
+</html>
