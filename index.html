@@ -7,12 +7,12 @@
 		<title>Internet measurement during the COVID-19 pandemic with PacketLab</title>
 
 		
-  		<link rel="stylesheet" href="/css/style.css">
-		<link rel="stylesheet" href="/css/fonts.css">
+  		<link rel="stylesheet" href="/COVID-19/css/style.css">
+		<link rel="stylesheet" href="/COVID-19/css/fonts.css">
 		
-		<link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png">
-		<link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png">
-		<link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+		<link rel="icon" type="image/png" sizes="32x32" href="/COVID-19/images/favicon-32x32.png">
+		<link rel="icon" type="image/png" sizes="16x16" href="/COVID-19/images/favicon-16x16.png">
+		<link rel="apple-touch-icon" sizes="180x180" href="/COVID-19/images/apple-touch-icon.png">
 
 		
 		<link href="" rel="alternate" type="application/rss+xml" title="My New Hugo Site" />
@@ -21,7 +21,7 @@
     <body>
         		<nav class="nav">
 			<div class="nav-container">
-				<a href="/">
+				<a href="/COVID-19/">
 					<h2 class="nav-title">PacketLab COVID-19 Project</h2>
 				</a>
 				<ul>
@@ -48,7 +48,7 @@
 
 		
 
-		<p><img src="/pktlab_logo.png" alt=""></p>
+		<p><img src="/COVID-19/pktlab_logo.png" alt=""></p>
 <h2 id="what-is-this-about">What is this about?</h2>
 <p>As we go through the COVID-19 pandemic with social distancing being practiced, Internet usage is expected to rise with addition multimedia traffic introduced due to utilization of video conferencing software and multimedia entertainment services. It would therefore be interesting to perform network measurements to see the actual impact of the pandemic on Internet performance.</p>
 <p>Contrary to utilizing existing measurement infrastructure, in this project we opt to employ <a href="https://www.caida.org/publications/papers/2017/packetlab/packetlab.pdf"><strong>PacketLab</strong></a> due to the general functionality provided where a much larger variety of different experiments can be executed without needing to change the measurment endpoint in any way. With this project we hope to showcase the diverse ability of PacketLab as well as put PacketLab to test and identify some possible improvements for the PacketLab design.</p>
@@ -94,7 +94,7 @@
 <li>Step (1): Download the Docker image <a href="pktlab.caida.org:20557/pktlabme_image.tar.gz">pktlabme_image.tar.gz</a>.</li>
 </ul>
 <blockquote>
-<p>Optional: The digital signature for the image is available <a href="pktlab.caida.org:20557/pktlabme_image.tar.gz.sha256">here</a>. To verify the image, one could download the <a href="/public.pem">ECDSA public key</a> and verify the image tarball via the following OpenSSL command (tested with OpenSSL 1.1.1):</p>
+<p>Optional: The digital signature for the image is available <a href="pktlab.caida.org:20557/pktlabme_image.tar.gz.sha256">here</a>. To verify the image, one could download the <a href="/COVID-19/public.pem">ECDSA public key</a> and verify the image tarball via the following OpenSSL command (tested with OpenSSL 1.1.1):</p>
 <pre><code>openssl dgst -sha256 -verify public.pem -signature pktlabme_image.tar.gz.sha256 pktlabme_image.tar.gz
 </code></pre><p>The command will print <code>Verified OK</code> if the image and signature matches.</p>
 </blockquote>
