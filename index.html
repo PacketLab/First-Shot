@@ -15,7 +15,7 @@
 		<link rel="apple-touch-icon" sizes="180x180" href="/COVID-19/images/apple-touch-icon.png">
 
 		
-		<link href="" rel="alternate" type="application/rss+xml" title="My New Hugo Site" />
+		<link href="" rel="alternate" type="application/rss+xml" title="PacketLab COVID-19 Project" />
 	</head>
 
     <body>
@@ -35,39 +35,46 @@
 
 <main>
 	<div class="post">
-	<!--
 		<div class="post-info">
     <span>Written by</span>
         
         <br>
         <span>on&nbsp;</span><time datetime="2020-04-22 01:34:42 -0400 EDT">April 22, 2020</time>
 </div>
-	-->
 		<h1 class="post-title">Internet measurement during the COVID-19 pandemic with PacketLab</h1>
 <div class="post-line"></div>
 
 		
 
 		<p><img src="/COVID-19/pktlab_logo.png" alt=""></p>
-<h2 id="what-is-this-about">What is this about?</h2>
-<p>As we go through the COVID-19 pandemic with social distancing being practiced, Internet usage is expected to rise with addition multimedia traffic introduced due to utilization of video conferencing software and multimedia entertainment services. It would therefore be interesting to perform network measurements to see the actual impact of the pandemic on Internet performance.</p>
-<p>Contrary to utilizing existing measurement infrastructure, in this project we opt to employ <a href="https://www.caida.org/publications/papers/2017/packetlab/packetlab.pdf"><strong>PacketLab</strong></a> due to the general functionality provided where a much larger variety of different experiments can be executed without needing to change the measurment endpoint in any way. With this project we hope to showcase the diverse ability of PacketLab as well as put PacketLab to test and identify some possible improvements for the PacketLab design.</p>
+<h2 id="overview">Overview</h2>
+<p>In this project, we employ PacketLab prototype endpoints to measure the availability of Internet critical services during the period of the COVID-19 pandemic. Our main goals are <strong>(1) to test the PacketLab prototype endpoints and search for possible improvements to PacketLab</strong>, <strong>(2) to showcase the diverse functionality provided by PacketLab in real-world network measurements</strong>, and <strong>(3) obtain statistics regarding the availability of critical Internet services during the pandemic</strong>. Some measurements that we are currently planning of doing are measuring DNS query latencies from measurement endpoints, measuring latency from endpoints to the experiment controller, as well as measuring available bandwidth of endpoints. We hope that via the results of this project, we can further improve the existing PacketLab design and also obtain interesting statistics about the network condition during the COVID-19 pandemic along the way.</p>
 <h2 id="what-is-packetlab">What is PacketLab?</h2>
-<p>PacketLab is a universal measurement endpoint interface that lowers the barriers faced by experimenters and measurement endpoint operators. PacketLab is built on two key ideas: It moves the measurement logic out of the endpoint to a separate experiment control server, making each endpoint a lightweight packet source/sink. At the same time, it provides a way to delegate access to measurement endpoints while retaining fine-grained control over how endpoints are used by others, allowing research groups to share measurement infrastructure with each other with little overhead. PacketLab is currently still under development. However, a prototype reference endpoint implementation as a stand alone binary (packaged in a Docker image) is available to run network measurement experiments utilizing TCP and UDP services, which we will employ to perform network measurements in this project.</p>
+<p><a href="https://www.caida.org/publications/papers/2017/packetlab/packetlab.pdf"><strong>PacketLab</strong></a> is a universal measurement endpoint interface that lowers the barriers faced by experimenters and measurement endpoint operators. PacketLab is built on two key ideas: It moves the measurement logic out of the endpoint to a separate experiment control server, making each endpoint a lightweight packet source/sink. At the same time, it provides a way to delegate access to measurement endpoints while retaining fine-grained control over how endpoints are used by others, allowing research groups to share measurement infrastructure with little overhead. PacketLab is currently still under development. However, a prototype reference endpoint implementation as a stand-alone binary (packaged in a Docker image) is available to run network measurement experiments utilizing TCP and UDP services, which we will employ to perform network measurements in this project.</p>
+<h2 id="why-packetlab-why-even-do-this">Why PacketLab? Why even do this?</h2>
+<p>Contrary to utilizing existing measurement infrastructure, in this project, we opt to employ PacketLab due to the general functionality provided where a much larger variety of different experiments can be executed without needing to change the measurement endpoint in any way. With this project, we hope to showcase the diverse ability of PacketLab as well as put the existing prototype of PacketLab to test and identify some possible improvements for the PacketLab design.</p>
+<p>In addition, as we go through the COVID-19 pandemic with social distancing being practiced, Internet usage is expected to rise with additional multimedia traffic introduced due to the utilization of video conferencing software and multimedia entertainment services. It would therefore be interesting to perform network measurements to see the actual impact of the pandemic on Internet performance, especially in terms of availability of critical network services.</p>
 <h2 id="what-will-we-do-with-the-deployed-endpoints">What will we do with the deployed endpoints?</h2>
-<p>For the deployed endpoints, we currently plan to perform Internet measurement experiments such as measuring latency for queries to public DNS resolvers (e.g. Google public DNS) and local DNS resolvers as well as measurement of network latency from endpoints to the experiment controller at UIUC.</p>
+<p>For the deployed endpoints, we currently plan to perform Internet measurement experiments such as measuring latency for queries to public DNS resolvers (e.g. Google public DNS) and local DNS resolvers, measurement of network latency from endpoints to the experiment controller at UIUC, as well as measurement of the available bandwidth of each endpoint.</p>
 <p>As the PacketLab reference endpoint implementation is currently still under development, it may be possible that we will distribute updated endpoint binaries to deployed endpoint Docker containers for bug fix and feature enhancement. The process of updating will be done securely with digital signatures employed to prevent tampering with the sent binary.</p>
-<p>Due to this project being temporary during the period of the COVID-19 pandemic, a kill switch mechanism is embedded in the endpoint where when signaled, the execution of the endpoint will be stopped and the Docker container will exit afterwards. The kill switch will be turned on after the measurement experiments have all been completed.</p>
-<p>In addition, the execution of the endpoint will also be halted if the endpoint fail to reach the pktlab.caida.org:20557 HTTP server for 3 consecutive days to prevent the existence of lingering measurment endpoints that does not have access to the Internet.</p>
+<p>Due to this project being temporary during the period of the COVID-19 pandemic, a kill switch mechanism is embedded in the endpoint where when signaled, the execution of the endpoint will be stopped and the Docker container will exit afterward. The kill switch will be turned on after the measurement experiments have all been completed.</p>
+<p>In addition, the execution of the endpoint will also be halted if the endpoint failed to reach the pktlab.caida.org:20557 HTTP server for 3 consecutive days to prevent the existence of lingering measurement endpoints that do not have Internet connectivity.</p>
 <h2 id="how-do-i---">How do I . . .</h2>
 <h3 id="participate-in-the-project">Participate in the project?</h3>
-<p>To participate in this project, join us by setting up an endpoint on your local machine via following the provided steps below to retrieve and deploy the Docker image for the endpoint (basically by first following the instructions in the <strong>Retrieve and load the Docker image</strong> section and then following the instructions in the <strong>Run the PacketLab measurement endpoint after loading the Docker image</strong> section).</p>
-<h4 id="prerequisite">Prerequisite</h4>
+<p>To participate in this project, join us by setting up an endpoint on your local machine via following the provided steps below to retrieve and deploy the Docker image for the endpoint:</p>
 <ol>
-<li>Any Linux distro with a recent enough kernel</li>
+<li>Set up your local machine to fulfill the <strong>Prerequisite</strong>.</li>
+<li>Follow the steps in the <strong>Retrieve and load the Docker image</strong> section to obtain (and verify) the endpoint Docker image.</li>
+<li>Follow the steps in the <strong>Run the PacketLab measurement endpoint after loading the Docker image</strong> section to run the endpoint Docker container.</li>
+</ol>
+<h4 id="prerequisite">Prerequisite</h4>
+<h5 id="linux">Linux</h5>
+<ol>
+<li>Docker supported Linux distro with a recent enough kernel</li>
 </ol>
 <blockquote>
-<p>Tested on an Ubuntu 18.04 machine with kernel version 4.15.0</p>
+<p>See <a href="https://docs.docker.com/engine/install/">Install Docker Engine</a> for more information on a list of supported distros, additional requirements by Docker, and steps for how to install Docker on each of the distros.
+Tested on an Ubuntu 18.04 machine with kernel version 4.15.0.</p>
 </blockquote>
 <ol start="2">
 <li>An up to date Docker installation</li>
@@ -76,27 +83,58 @@
 <p>Tested on Docker community edition with client version 19.03.8, server engine version 19.03.8, server containerd version 1.2.13, server runc version 1.0.0-rc10 and server docker-init version 0.18.0.</p>
 </blockquote>
 <ol start="3">
-<li><code>tar</code></li>
+<li>Internet connectivity</li>
+</ol>
+<h5 id="windows">Windows</h5>
+<ol>
+<li>Docker desktop supported Microsoft Windows 10 operating system</li>
 </ol>
 <blockquote>
-<p>Tested with GNU tar 1.29</p>
+<p>See <a href="https://docs.docker.com/docker-for-windows/install/">Install Docker Desktop on Windows</a> for more information on supported Windows 10 versions, additional requirements by Docker, and steps for how to install Docker desktop.
+Tested with Microsoft Windows 10 64-bit Professional (Build 17763.1158).</p>
 </blockquote>
-<ol start="4">
-<li>Internet connectivity</li>
-<li>[OPTIONAL] <code>openssl</code></li>
+<ol start="2">
+<li>An up to date Docker desktop installation</li>
 </ol>
+<blockquote>
+<p>Tested with Docker desktop community version 2.2.0.5 (43884), engine version 19.03.8, notary version 0.6.1, compose version 1.25.4, credential helper version 0.6.3, and Kubernetes v1.15.5.</p>
+</blockquote>
+<ol start="3">
+<li>Internet connectivity</li>
+</ol>
+<h5 id="macos">macOS</h5>
+<ol>
+<li>Docker desktop supported macOS and Mac hardware</li>
+</ol>
+<blockquote>
+<p>See <a href="https://docs.docker.com/docker-for-mac/install/">Install Docker Desktop on Mac</a> for more information on supported macOS and hardware versions, additional requirements by Docker, and steps for how to install Docker desktop.
+Tested with macOS Catalina version 10.15.1.</p>
+</blockquote>
+<ol start="2">
+<li>An up to date Docker desktop installation</li>
+</ol>
+<blockquote>
+<p>Tested with Docker desktop version 2.2.0.5 (43884), engine 19.03.8, notary 0.6.1, compose 1.25.4, credential helper 0.6.3, and Kubernetes v1.15.5.</p>
+</blockquote>
+<ol start="3">
+<li>Internet connectivity</li>
+</ol>
+<h5 id="optional-for-image-verification">Optional for image verification</h5>
+<ul>
+<li><code>openssl</code></li>
+</ul>
 <blockquote>
 <p>Tested with OpenSSL 1.1.1</p>
 </blockquote>
 <h3 id="retrieve-and-load-the-docker-image">Retrieve and load the Docker image?</h3>
 <p>Currently, the PacketLab endpoint is packaged as a Docker image. To retrieve and load the Docker image, follow the following 2 steps:</p>
 <ul>
-<li>Step (1): Download the Docker image <a href="pktlab.caida.org:20557/pktlabme_image.tar.gz">pktlabme_image.tar.gz</a>.</li>
+<li>Step (1): Download the Docker image <a href="http://pktlab.caida.org:20557/pktlabme_image.tar.gz">pktlabme_image.tar.gz</a>.</li>
 </ul>
 <blockquote>
-<p>Optional: The digital signature for the image is available <a href="pktlab.caida.org:20557/pktlabme_image.tar.gz.sha256">here</a>. To verify the image, one could download the <a href="/COVID-19/public.pem">ECDSA public key</a> and verify the image tarball via the following OpenSSL command (tested with OpenSSL 1.1.1):</p>
+<p>Optional: The digital signature for the image is available <a href="http://pktlab.caida.org:20557/pktlabme_image.tar.gz.sha256">here</a>. To verify the image, one could download the <a href="/COVID-19/public.pem">ECDSA public key</a> and verify the image tarball via the following OpenSSL command (tested with OpenSSL 1.1.1):</p>
 <pre><code>openssl dgst -sha256 -verify public.pem -signature pktlabme_image.tar.gz.sha256 pktlabme_image.tar.gz
-</code></pre><p>The command will print <code>Verified OK</code> if the image and signature matches.</p>
+</code></pre><p>The command will print <code>Verified OK</code> if the image and signature match.</p>
 </blockquote>
 <ul>
 <li>Step (2): Load the downloaded PacketLab Docker image via running:</li>
@@ -106,9 +144,9 @@
 <h3 id="run-the-packetlab-measurement-endpoint-after-loading-the-docker-image">Run the PacketLab measurement endpoint after loading the Docker image?</h3>
 <p>To instantiate a container from the Docker image and run it, execute the following command:</p>
 <pre><code>docker run -d --rm pktlabme
-</code></pre><p>The container ID for the instantiated endpoint Docker container will be printed if started successfully. At this point the endpoint is now up and available for experiment running.</p>
+</code></pre><p>The container ID for the instantiated endpoint Docker container will be printed if started successfully. At this point, the endpoint is now up and available for experiment running.</p>
 <blockquote>
-<p>Note that running the container in detached mode (<code>-d</code> option) is highly recommended due to problems of deteaching from the container. The <code>--rm</code> option allow automatic removal of the instantiated container after the container stops.</p>
+<p>Note that running the container in detached mode (<code>-d</code> option) is highly recommended due to problems of detaching from the container. The <code>--rm</code> option allows automatic removal of the instantiated container after the container stops.</p>
 </blockquote>
 <h3 id="stop-running-the-endpoint">Stop running the endpoint?</h3>
 <p>If one would like to stop running the endpoint, first find the container ID printed when running the container, or run</p>
@@ -144,7 +182,7 @@ If the <code>--rm</code> option is specified when running the Docker container, 
 
         		<footer>
 			<span>
-			&copy; <time datetime="2020-04-22 02:23:13.823385012 -0400 EDT m=&#43;0.048172522">2020</time> . Made with <a href='https://gohugo.io'>Hugo</a> using the <a href='https://github.com/EmielH/tale-hugo/'>Tale</a> theme.
+			&copy; <time datetime="2020-05-01 18:15:48.008461791 -0400 EDT m=&#43;0.053218435">2020</time> . Made with <a href='https://gohugo.io'>Hugo</a> using the <a href='https://github.com/EmielH/tale-hugo/'>Tale</a> theme.
 			</span>
 		</footer>
 
