@@ -7,22 +7,22 @@
 		<title>Internet measurement during the COVID-19 pandemic with PacketLab</title>
 
 		
-  		<link rel="stylesheet" href="/COVID-19/css/style.css">
-		<link rel="stylesheet" href="/COVID-19/css/fonts.css">
+  		<link rel="stylesheet" href="/First-Shot/css/style.css">
+		<link rel="stylesheet" href="/First-Shot/css/fonts.css">
 		
-		<link rel="icon" type="image/png" sizes="32x32" href="/COVID-19/images/favicon-32x32.png">
-		<link rel="icon" type="image/png" sizes="16x16" href="/COVID-19/images/favicon-16x16.png">
-		<link rel="apple-touch-icon" sizes="180x180" href="/COVID-19/images/apple-touch-icon.png">
+		<link rel="icon" type="image/png" sizes="32x32" href="/First-Shot/images/favicon-32x32.png">
+		<link rel="icon" type="image/png" sizes="16x16" href="/First-Shot/images/favicon-16x16.png">
+		<link rel="apple-touch-icon" sizes="180x180" href="/First-Shot/images/apple-touch-icon.png">
 
 		
-		<link href="" rel="alternate" type="application/rss+xml" title="PacketLab COVID-19 Project" />
+		<link href="" rel="alternate" type="application/rss+xml" title="PacketLab" />
 	</head>
 
     <body>
         		<nav class="nav">
 			<div class="nav-container">
-				<a href="/COVID-19/">
-					<h2 class="nav-title">PacketLab COVID-19 Project</h2>
+				<a href="/First-Shot/">
+					<h2 class="nav-title">PacketLab</h2>
 				</a>
 				<ul>
     
@@ -40,9 +40,9 @@
 
 		
 
-		<p><img src="/COVID-19/pktlab_logo.png" alt=""></p>
+		<p><img src="/First-Shot/pktlab_logo.png" alt=""></p>
 <h2 id="overview">Overview</h2>
-<p>In this project, we employ PacketLab prototype endpoints to measure the availability of Internet critical services during the period of the COVID-19 pandemic. Our main goals are <strong>(1) to test the PacketLab prototype endpoints and search for possible improvements to PacketLab</strong>, <strong>(2) to showcase the diverse functionality provided by PacketLab in real-world network measurements</strong>, and <strong>(3) obtain statistics regarding the availability of critical Internet services during the pandemic</strong>. Some measurements that we are currently planning of doing are measuring DNS query latencies from measurement endpoints, measuring latency from endpoints to the experiment controller, as well as measuring available bandwidth of endpoints. We hope that via the results of this project, we can further improve the existing PacketLab design and also obtain interesting statistics about the network condition during the COVID-19 pandemic along the way.</p>
+<p>In this project, we employ PacketLab prototype endpoints to measure the availability of Internet critical services during the period of the COVID-19 pandemic. Our main goals are <strong>(1) to test the PacketLab prototype endpoints and search for possible improvements to PacketLab</strong>, <strong>(2) to showcase the diverse functionality provided by PacketLab in real-world network measurements</strong>, and <strong>(3) obtain statistics regarding the availability of critical Internet services during the pandemic</strong>. Some measurements that we are currently planning of doing are measuring DNS query latencies from measurement endpoints, measuring latency from endpoints to the experiment controller, as well as measuring available bandwidth of endpoints. We hope that via the results of this project, we can further improve the existing PacketLab design and also obtain more infomation on the variation of network resource consumption during this period of time.</p>
 <h2 id="what-is-packetlab">What is PacketLab?</h2>
 <p><a href="https://www.caida.org/publications/papers/2017/packetlab/packetlab.pdf"><strong>PacketLab</strong></a> is a universal measurement endpoint interface that lowers the barriers faced by experimenters and measurement endpoint operators. PacketLab is built on two key ideas: It moves the measurement logic out of the endpoint to a separate experiment control server, making each endpoint a lightweight packet source/sink. At the same time, it provides a way to delegate access to measurement endpoints while retaining fine-grained control over how endpoints are used by others, allowing research groups to share measurement infrastructure with little overhead. PacketLab is currently still under development. However, a prototype reference endpoint implementation as a stand-alone binary (packaged in a Docker image) is available to run network measurement experiments utilizing TCP and UDP services, which we will employ to perform network measurements in this project.</p>
 <h2 id="why-packetlab-why-even-do-this">Why PacketLab? Why even do this?</h2>
@@ -126,7 +126,7 @@ Tested with macOS Catalina version 10.15.1.</p>
 <li>Step (1): Download the Docker image <a href="http://pktlab.caida.org:20557/pktlabme_image.tar.gz">pktlabme_image.tar.gz</a>.</li>
 </ul>
 <blockquote>
-<p>Optional: The digital signature for the image is available <a href="http://pktlab.caida.org:20557/pktlabme_image.tar.gz.sha256">here</a>. To verify the image, one could download the <a href="/COVID-19/public.pem">ECDSA public key</a> and verify the image tarball via the following OpenSSL command (tested with OpenSSL 1.1.1):</p>
+<p>Optional: The digital signature for the image is available <a href="http://pktlab.caida.org:20557/pktlabme_image.tar.gz.sha256">here</a>. To verify the image, one could download the <a href="/First-Shot/public.pem">ECDSA public key</a> and verify the image tarball via the following OpenSSL command (tested with OpenSSL 1.1.1):</p>
 <pre><code>openssl dgst -sha256 -verify public.pem -signature pktlabme_image.tar.gz.sha256 pktlabme_image.tar.gz
 </code></pre><p>The command will print <code>Verified OK</code> if the image and signature match.</p>
 </blockquote>
@@ -176,7 +176,7 @@ If the <code>--rm</code> option is specified when running the Docker container, 
 
         		<footer>
 			<span>
-			&copy; <time datetime="2020-05-01 18:15:48.008461791 -0400 EDT m=&#43;0.053218435">2020</time> . Made with <a href='https://gohugo.io'>Hugo</a> using the <a href='https://github.com/EmielH/tale-hugo/'>Tale</a> theme.
+			&copy; <time datetime="2020-05-08 13:44:23.041545704 -0400 EDT m=&#43;0.048547163">2020</time> . Made with <a href='https://gohugo.io'>Hugo</a> using the <a href='https://github.com/EmielH/tale-hugo/'>Tale</a> theme.
 			</span>
 		</footer>
 
