@@ -1,6 +1,7 @@
 # [PacketLab COVID-19 Project `data.jsonl` Format Specification](http://pktlab.caida.org:20557/data.jsonl)
 ###### tags: `pktlab`
 > By Tzu-Bin Yan on 2020/05/16
+> Updated on 2020/05/18
 
 ### Per line general format
 Same as specified in the GitHub issue [page](https://github.com/CAIDA/packletlab-viz/issues/1), the format for each line of the JSONL file is specified as follows:
@@ -16,7 +17,8 @@ Same as specified in the GitHub issue [page](https://github.com/CAIDA/packletlab
 - `expData`: JSON Object, additional information for the ran experiment
 
 ### `data` field
-The `expData` field present in the per line JSON object stores an object containing different fields for different experiments, which are specified as follows:
+The `expData` field present in the per line JSON object stores an object containing different fields for different successfully run experiments, which are specified as follows:
+> Note that if the experiment is not successful (i.e. `result` field is 0), the `expData` field will always contain an empty JSON object `{}`
 
 #### `DNS_quad_1`, `DNS_quad_8`, `DNS_quad_9`, `DNS_quad_101`
 For this set of experiments, the `expData` JSON object follows the following format:
