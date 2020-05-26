@@ -1,7 +1,7 @@
 # [PacketLab COVID-19 Project `data.jsonl` Format Specification](http://pktlab.caida.org:20557/data.jsonl)
 ###### tags: `pktlab`
 > By Tzu-Bin Yan on 2020/05/16
-> Updated on 2020/05/18
+> Updated on 2020/05/26
 
 ### Per line general format
 Same as specified in the GitHub issue [page](https://github.com/CAIDA/packletlab-viz/issues/1), the format for each line of the JSONL file is specified as follows:
@@ -49,4 +49,12 @@ For this experiment, the `expData` JSON object follows the following format:
 - `controllerRecvTime`: Type number (int), controller time (epoch time in nano second precision) when receiving the corresponding response for the PacketLab message related to `controllerSendTime` (for endpoint controller latency calculation)
 
 #### `avail_band`
->(Field definition to be added)
+For this experiment, the `expData` JSON object follows the following format:
+```
+{"btnk_band": bottleneckBand, "avail_band": availableBand, "ctrl_stime": controllerSendTime, "ctrl_rtime": controllerRecvTime}
+```
+- `bottleneckBand`: Type number (real) (i.e. float), measured bottleneck link capacity from endpoint to controller in bps
+- `availableBand`: Type number (real) (i.e. float), measured available bandwidth from endpoint to controller in bps
+- `controllerSendTime`: Type number (int), controller time (epoch time in nano second precision) when sending one of the PacketLab messages in the experiment (for endpoint controller latency calculation)
+- `controllerRecvTime`: Type number (int), controller time (epoch time in nano second precision) when receiving the corresponding response for the PacketLab message related to `controllerSendTime` (for endpoint controller latency calculation)
+
