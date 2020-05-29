@@ -42,17 +42,50 @@
 
 		<p><img src="/First-Shot/pktlab_logo.png" alt=""></p>
 <h2 id="overview">Overview</h2>
-<p>In this project, we employ PacketLab prototype endpoints to measure the availability of Internet critical services during the period of the COVID-19 pandemic. Our main goals are <strong>(1) to test the PacketLab prototype endpoints and search for possible improvements to PacketLab</strong>, <strong>(2) to showcase the diverse functionality provided by PacketLab in real-world network measurements</strong>, and <strong>(3) obtain statistics regarding the availability of critical Internet services during the pandemic</strong>. Some measurements that we are currently planning of doing are measuring DNS query latencies from measurement endpoints, measuring latency from endpoints to the experiment controller, as well as measuring available bandwidth of endpoints. We hope that via the results of this project, we can further improve the existing PacketLab design and also obtain more information on the variation of network resource consumption during this time.</p>
+<p>In this project, we employ PacketLab prototype endpoints to measure the availability of Internet critical services during the period of the COVID-19 pandemic. Our main goals are <strong>(1) to test the PacketLab prototype endpoints and search for possible improvements to PacketLab</strong>, <strong>(2) to showcase the diverse functionality provided by PacketLab in real-world network measurements</strong>, and <strong>(3) obtain statistics regarding the availability of critical Internet services during the pandemic</strong>. Some measurements that we are currently planning of doing are measuring DNS query latencies from measurement endpoints, as well as measuring available bandwidth of endpoints. We hope that via the results of this project, we can further improve the existing PacketLab design and also obtain more information on the variation of network resource consumption during this time.</p>
 <h2 id="what-is-packetlab">What is PacketLab?</h2>
 <p><a href="https://www.caida.org/publications/papers/2017/packetlab/packetlab.pdf"><strong>PacketLab</strong></a> is a universal measurement endpoint interface that lowers the barriers faced by experimenters and measurement endpoint operators. PacketLab is built on two key ideas: It moves the measurement logic out of the endpoint to a separate experiment control server, making each endpoint a lightweight packet source/sink. At the same time, it provides a way to delegate access to measurement endpoints while retaining fine-grained control over how endpoints are used by others, allowing research groups to share measurement infrastructure with little overhead. PacketLab is currently still under development. However, a prototype reference endpoint implementation as a stand-alone binary (packaged in a Docker image) is available to run network measurement experiments utilizing TCP and UDP services, which we will employ to perform network measurements in this project.</p>
 <h2 id="why-packetlab-why-even-do-this">Why PacketLab? Why even do this?</h2>
 <p>Contrary to utilizing existing measurement infrastructure, in this project, we opt to employ PacketLab due to the general functionality provided where a much larger variety of different experiments can be executed without needing to change the measurement endpoint in any way. With this project, we hope to showcase the diverse ability of PacketLab as well as put the existing prototype of PacketLab to test and identify some possible improvements for the PacketLab design.</p>
 <p>In addition, as we go through the COVID-19 pandemic with social distancing being practiced, Internet usage is expected to rise with additional multimedia traffic introduced due to the utilization of video conferencing software and multimedia entertainment services. It would therefore be interesting to perform network measurements to see the actual impact of the pandemic on Internet performance, especially in terms of availability of critical network services.</p>
 <h2 id="what-will-we-do-with-the-deployed-endpoints">What will we do with the deployed endpoints?</h2>
-<p>For the deployed endpoints, we currently plan to perform Internet measurement experiments such as measuring latency for queries to public DNS resolvers (e.g. Google public DNS) and local DNS resolvers, measurement of network latency from endpoints to the experiment controller at UIUC, as well as measurement of the available bandwidth of each endpoint.</p>
+<p>For the deployed endpoints, we currently plan to perform Internet measurement experiments such as measuring latency for queries to public DNS resolvers (e.g. Google public DNS) and local DNS resolvers, as well as measurement of the available bandwidth from each endpoint to the controller.</p>
 <p>As the PacketLab reference endpoint implementation is currently still under development, it may be possible that we will distribute updated endpoint binaries to deployed endpoint Docker containers for bug fix and feature enhancement. The process of updating will be done securely with digital signatures employed to prevent tampering with the sent binary.</p>
 <p>Due to this project being temporary during the period of the COVID-19 pandemic, a kill switch mechanism is embedded in the endpoint where when signaled, the execution of the endpoint will be stopped and the Docker container will exit afterward. The kill switch will be turned on after the measurement experiments have all been completed.</p>
 <p>In addition, the execution of the endpoint will also be halted if the endpoint failed to reach the pktlab.caida.org:20557 HTTP server for 3 consecutive days to prevent the existence of lingering measurement endpoints that do not have Internet connectivity.</p>
+<h3 id="usage-patterns">Usage patterns</h3>
+<h4 id="network-bandwidth-required">Network bandwidth required</h4>
+<p>A combined total of all traffic incurred due to experiments and endpoint periodic update checking will top at around 5MB per hour. Additional traffic may be incurred due to endpoint update retrieving but is expected to be infrequent and should result in less than 1 MB of additional traffic.</p>
+<h4 id="type-of-network-traffic-to-expect-for-endpoint">Type of network traffic to expect for endpoint</h4>
+<ol>
+<li>Periodic outgoing TCP connection and bidirectional TCP traffic against <code>pktlab.caida.org</code> port <code>20556</code> for PacketLab experiment operations.</li>
+<li>Periodic HTTP request against <code>pktlab.caida.org:20557</code> HTTP server for potential updates and kill switch polling.</li>
+<li>One-time TCP connection against <code>pktlab.caida.org</code> port <code>20558</code> for endpoint ID assignment.</li>
+<li>DNS traffic for <code>pktlab.caida.org</code> domain resolving.</li>
+<li>Experiment-specific traffic as follows:</li>
+</ol>
+<table>
+<thead>
+<tr>
+<th>Exp. Name</th>
+<th>Type of Traffic</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>DNS_quad_X</code></td>
+<td>DNS traffic (A record query for <code>www.example.com</code> and response) against the public DNS resolver at <code>X.X.X.X</code> over UDP.</td>
+</tr>
+<tr>
+<td><code>DNS_local</code></td>
+<td>DNS traffic (A record query for <code>www.example.com</code> and response) against the endpoint local DNS resolver over UDP.</td>
+</tr>
+<tr>
+<td><code>avail_band</code></td>
+<td>Outgoing UDP traffic toward <code>pktlab.caida.org</code> port <code>10241</code> for available bandwidth measuring using the <a href="https://www.cs.cmu.edu/afs/cs/project/cmcl/archive/papers/igi-tr.pdf">packet pair technique</a>. Potential incoming UDP traffic (one packet per experiment) for time synchronization using the NTP clock sync algorithm.</td>
+</tr>
+</tbody>
+</table>
 <h2 id="how-do-i---">How do I . . .</h2>
 <h3 id="participate-in-the-project">Participate in the project?</h3>
 <p>To participate in this project, join us by setting up an endpoint on your local machine via following the provided steps below to retrieve and deploy the Docker image for the endpoint:</p>
@@ -62,6 +95,12 @@
 <li>Follow the steps in the <strong>Run the PacketLab measurement endpoint after loading the Docker image</strong> section to run the endpoint Docker container.</li>
 </ol>
 <h4 id="prerequisite">Prerequisite</h4>
+<h5 id="general">General</h5>
+<ol>
+<li>110 MB of available disk space</li>
+<li>30 MB of free memory for endpoint container running</li>
+<li>Internet connectivity</li>
+</ol>
 <h5 id="linux">Linux</h5>
 <ol>
 <li>Docker supported Linux distro with a recent enough kernel</li>
@@ -76,9 +115,6 @@ Tested on an Ubuntu 18.04 machine with kernel version 4.15.0.</p>
 <blockquote>
 <p>Tested on Docker community edition with client version 19.03.8, server engine version 19.03.8, server containerd version 1.2.13, server runc version 1.0.0-rc10, and server docker-init version 0.18.0.</p>
 </blockquote>
-<ol start="3">
-<li>Internet connectivity</li>
-</ol>
 <h5 id="windows">Windows</h5>
 <ol>
 <li>Docker desktop supported Microsoft Windows 10 operating system</li>
@@ -93,9 +129,6 @@ Tested with Microsoft Windows 10 64-bit Professional (Build 17763.1158).</p>
 <blockquote>
 <p>Tested with Docker desktop community version 2.2.0.5 (43884), engine version 19.03.8, notary version 0.6.1, compose version 1.25.4, credential helper version 0.6.3, and Kubernetes v1.15.5.</p>
 </blockquote>
-<ol start="3">
-<li>Internet connectivity</li>
-</ol>
 <h5 id="macos">macOS</h5>
 <ol>
 <li>Docker desktop supported macOS and Mac hardware</li>
@@ -110,9 +143,6 @@ Tested with macOS Catalina version 10.15.1.</p>
 <blockquote>
 <p>Tested with Docker desktop version 2.2.0.5 (43884), engine 19.03.8, notary 0.6.1, compose 1.25.4, credential helper 0.6.3, and Kubernetes v1.15.5.</p>
 </blockquote>
-<ol start="3">
-<li>Internet connectivity</li>
-</ol>
 <h5 id="optional-for-image-verification">Optional for image verification</h5>
 <ul>
 <li><code>openssl</code></li>
@@ -169,7 +199,9 @@ After having the container ID, run the following command:</p>
 <h3 id="remove-the-loaded-docker-image">Remove the loaded Docker image?</h3>
 <p>To delete the loaded endpoint Docker image, run the following command:</p>
 <pre><code>docker rmi pktlabme
-</code></pre>
+</code></pre><h3 id="run-the-endpoint-without-docker">Run the endpoint without Docker?</h3>
+<p>Sadly, endpoint running is currently only supported with Docker in the form of Docker containers. However, we may add support for running endpoints directly on operating systems in the future.</p>
+
 
 		
 	</div>
@@ -183,7 +215,7 @@ After having the container ID, run the following command:</p>
 
         		<footer>
 			<span>
-			&copy; <time datetime="2020-05-17 20:28:25.97614143 -0400 EDT m=&#43;0.044949958">2020</time> . Made with <a href='https://gohugo.io'>Hugo</a> using the <a href='https://github.com/EmielH/tale-hugo/'>Tale</a> theme.
+			&copy; <time datetime="2020-05-29 17:22:06.705851241 -0400 EDT m=&#43;0.045468154">2020</time> . Made with <a href='https://gohugo.io'>Hugo</a> using the <a href='https://github.com/EmielH/tale-hugo/'>Tale</a> theme.
 			</span>
 		</footer>
 
