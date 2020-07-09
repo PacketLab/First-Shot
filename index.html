@@ -171,23 +171,37 @@ Tested with macOS Catalina version 10.15.1.</p>
 <h3 id="run-the-packetlab-measurement-endpoint-after-loading-the-docker-image">Run the PacketLab measurement endpoint after loading the Docker image?</h3>
 <p>To instantiate a container from the Docker image and run it, execute the following command in the terminal:</p>
 <pre><code>docker run -t -i pktlabme
-</code></pre><p>The terminal will then start printing some information regarding execution. At this point, the endpoint is now up and available for experiment running. Please take note of the <code>Endpoint ID</code> information (a base10 integer) printed out by the endpoint, since this information can be used to retrieve additional information regarding experiments run on the corresponding endpoint.</p>
+</code></pre><p>The terminal will then start printing some information regarding execution. At this point, the endpoint is now up and available for experiment running. Please take note of the endpoint ID information (a base10 integer in the printed information, e.g. <code>12345</code> in <code>2020-07-09 19:46:20 UTC (ID:12345): [INFO] Running pktlab measurement endpoint binary</code>), since this ID can be used to retrieve additional information regarding experiments run on the corresponding endpoint.</p>
 <blockquote>
 <p>Note that running the container with <code>-t</code> (allocate a pseudo-TTY) and <code>-i</code> (interactive mode) options is highly recommended to allow for detaching and reattaching to the container.</p>
 </blockquote>
 <h4 id="detaching">Detaching</h4>
 <p>After running the container with the <code>-i</code> and <code>-t</code> options, to detach from the container, type in <code>Ctrl-p</code> + <code>Ctrl-q</code> in the container terminal.</p>
-<h4 id="reattaching">Reattaching</h4>
-<p>To reattach to the endpoint container after detaching, run</p>
-<pre><code>docker attach [container ID]
-</code></pre><p>where <code>container ID</code> is the ID of the endpoint container.</p>
 <blockquote>
-<p>Note that the <code>container ID</code>, which is for Docker container management, is different from the endpoint ID given by the endpoint. To find the container ID, first detach from the container, then run</p>
-<pre><code>docker ps -a
-</code></pre><p>in the terminal, and identify the container having the image name <code>pktlabme</code> to find the corresponding container ID. One can detach from the container again using the <code>Ctrl-p</code> + <code>Ctrl-q</code> keystrokes.</p>
+<p>Note that the endpoint ID can still be retrieved after detaching from the container terminal. Please see the subsequent <strong>Endpoint ID</strong> subsection for further instructions.</p>
 </blockquote>
 <h4 id="endpoint-id">Endpoint ID</h4>
-<p>In addition to retrieving the endpoint ID when running the container, one can also reattach to the container via the terminal and obtain the endpoint ID, which is printed periodically by the endpoint. In addition, for those running the endpoint with Docker Desktop, the endpoint ID is also available by accessing the Docker Desktop dashboard and the Logs for the endpoint container.</p>
+<p>In addition to retrieving the endpoint ID when running the container, one can also retrieve the endpoint ID by accessing the logs of the container. To print out the logs in the terminal, run</p>
+<pre><code>docker logs [container ID]
+</code></pre><p>where <code>container ID</code> is the ID of the endpoint container.</p>
+<blockquote>
+<p>Note that the <code>container ID</code>, which is for Docker container management, is <strong>different</strong> from the endpoint ID given by the endpoint. To find the container ID, first detach from the container, then run</p>
+<pre><code>docker ps -a
+</code></pre><p>in the terminal, and identify the container having the image name <code>pktlabme</code> to find the corresponding container ID.</p>
+</blockquote>
+<p>For those running the endpoint with Docker Desktop, the endpoint ID is also available by accessing the Docker Desktop dashboard and the Logs for the endpoint container.</p>
+<h4 id="reattaching">Reattaching</h4>
+<p>Although unnecessary in normal circumstances, to reattach to the endpoint container after detaching, run</p>
+<pre><code>docker attach [container ID]
+</code></pre><p>where <code>container ID</code> is the ID of the endpoint container (the same as that used to access the logs of the container).</p>
+<h3 id="verify-that-my-endpoint-is-actually-running-experiments">Verify that my endpoint is actually running experiments?</h3>
+<p>Due to the design of the PacketLab protocol, an endpoint does not know what experiment is currently run at the endpoint. However, the information regarding the endpoint&rsquo;s connection with the controller is available in the logs of the endpoint, which can be used to infer endpoint experiment running. For example, the entry:</p>
+<pre><code>2020-07-09 20:12:40 UTC (ID:12345) (endpoint binary): [INFO] X.X.X.X,X: Controller socket connected
+</code></pre><p>indicates that the endpoint has established connection with the experiment controller, while</p>
+<pre><code>2020-07-09 20:12:46 UTC (ID:12345) (endpoint binary): [INFO] X.X.X.X,X: Controller socket read EOF
+2020-07-09 20:12:46 UTC (ID:12345) (endpoint binary): [INFO] X.X.X.X,X: Controller connection closed
+</code></pre><p>indicates that the endpoint has ended connection with the experiment controller, possibly implying the end of experiment execution.</p>
+<p>We are currently working on creating a website for endpoint operators to view information (e.g. plots) regarding past executed experiments for a particular endpoint.</p>
 <h3 id="stop-running-the-endpoint">Stop running the endpoint?</h3>
 <p>If one would like to stop running the endpoint, first find the container ID by running</p>
 <pre><code>docker ps -a
@@ -195,6 +209,10 @@ Tested with macOS Catalina version 10.15.1.</p>
 After having the container ID, run the following command:</p>
 <pre><code>docker stop [container ID]
 </code></pre><p>to stop the container.</p>
+<h4 id="resume-running">Resume running</h4>
+<p>If one would like to resume running a stopped endpoint container, run the following command:</p>
+<pre><code>docker start [container ID]
+</code></pre><p>with the <code>container ID</code> being the same as that used to stop the container (still accessible via <code>docker ps -a</code>).</p>
 <h3 id="remove-the-instantiated-docker-container">Remove the instantiated Docker container?</h3>
 <p>After stopping the endpoint container, to clean up the instantiated container one will need to remove it. To remove the container run</p>
 <pre><code>docker rm [container ID]
@@ -218,7 +236,7 @@ After having the container ID, run the following command:</p>
 
         		<footer>
 			<span>
-			&copy; <time datetime="2020-06-12 19:40:44.780540786 -0400 EDT m=&#43;0.050223656">2020</time> . Made with <a href='https://gohugo.io'>Hugo</a> using the <a href='https://github.com/EmielH/tale-hugo/'>Tale</a> theme.
+			&copy; <time datetime="2020-07-09 18:03:19.056715438 -0400 EDT m=&#43;0.092924146">2020</time> . Made with <a href='https://gohugo.io'>Hugo</a> using the <a href='https://github.com/EmielH/tale-hugo/'>Tale</a> theme.
 			</span>
 		</footer>
 
